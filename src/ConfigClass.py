@@ -20,3 +20,15 @@ class ConfigClass(object):
         self.epochs = int(model['epochs'])
         self.batch_size = int(model['batch_size'])
         self.lr = float(model['lr'])
+        self.mnist_cnn_weights = model['mnist_cnn_weights']
+        self.load_model = model.getboolean('load_model')
+
+        ### DATA
+        data = configFile['data']
+        self.normal = int(data['normal'])
+        self.outliers = int(data['outliers'])
+        self.max_samples = int(data['max_samples'])
+
+        ### SVDD
+        svdd = configFile['SVDD']
+        self.lambda_regularizer = float(svdd['lambda_regularizer'])

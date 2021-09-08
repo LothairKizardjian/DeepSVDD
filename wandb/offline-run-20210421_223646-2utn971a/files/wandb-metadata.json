@@ -1,0 +1,25 @@
+{
+    "os": "Linux-5.3.0-40-generic-x86_64-with-Ubuntu-18.04-bionic",
+    "python": "3.7.5",
+    "heartbeatAt": "2021-04-21T20:36:48.708792",
+    "startedAt": "2021-04-21T20:36:46.979870",
+    "docker": null,
+    "cpu_count": 4,
+    "cuda": null,
+    "args": [
+        "-c",
+        "config.ini"
+    ],
+    "state": "running",
+    "program": "main.py",
+    "codePath": "main.py",
+    "git": {
+        "remote": "https://github.com/LothairKizardjian/DeepSVDD",
+        "commit": "44c161685eee0a099f9dfb357a35ba1bb45221ec"
+    },
+    "email": "lothair.kizardjian@cea.fr",
+    "root": "/home/lothair/workspace/github/DeepSVDD",
+    "host": "lothair-Lenovo-ideapad-310-15IKB",
+    "username": "lothair",
+    "executable": "/usr/bin/python3"
+}

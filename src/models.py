@@ -1,53 +1,41 @@
-import tensorflow as tf
 import numpy as np
+import torch
+import torch.nn.functional as F
 
-from tensorflow.keras.layers import (Activation, AveragePooling2D, Flatten,
-                                     BatchNormalization, Conv2D, Dense,
-                                     Dropout, Input, MaxPooling2D)
-from tensorflow.keras.models import Model
+from torch import nn
+from torchvision.transforms import ToTensor, Lambda
 
-def mnist_cnn(input_shape,
-          output_channels,
-          activation="relu",
-          dropout=0.4, pool_size=(2,2),
-          filt_size=32,
-          kernel_size=(3, 3)):
 
-    inputs = Input(shape=input_shape)
-    x = BatchNormalization()(inputs)
+class Mnist_CNN(nn.Module):
+    def __init__(self, config):
+        super().__init__()
+        self.config = config
+        self.conv_stack = nn.Sequential(
+            nn.Conv2d(1, 32, kernel_size=3, bias=False),
+            nn.ReLU(),
+            nn.Dropout(config.dropout),
+            nn.Conv2d(32, 32, kernel_size=3, bias=False),
+            nn.ReLU(),
+            nn.Dropout(config.dropout),
+            nn.Conv2d(32, 32, kernel_size=5, stride=2, bias=False),
+            nn.ReLU(),
+            nn.Dropout(config.dropout),
+            nn.Conv2d(32, 64, kernel_size=3, bias=False),
+            nn.ReLU(),
+            nn.Dropout(config.dropout),
+            nn.Conv2d(64, 64, kernel_size=3, bias=False),
+            nn.ReLU(),
+            nn.Dropout(config.dropout),
+            nn.Conv2d(64, 64, kernel_size=5, stride=2, bias=False),
+            nn.ReLU(),
+            nn.Dropout(config.dropout),
+            nn.Flatten(),
+            nn.Linear(64, config.output_channels, bias=False)
+            # Pas moyen de récup le shape après le flatten directement ?
+        )
 
-    """
-    x = Conv2D(filt_size, kernel_size, padding="same", activation=activation, use_bias=False)(x)
-    x = Dropout(dropout)(x)
-    x = Conv2D(filt_size, kernel_size, padding="same", activation=activation, use_bias=False)(x)
-    x = Dropout(dropout)(x)
-    x = BatchNormalization()(x)
-    """
-    
-    x = Conv2D(filt_size, kernel_size=(5, 5), activation=activation,
-               strides=(2, 2), padding="same", use_bias=False)(x)
-    x = Dropout(dropout)(x)
-    x = BatchNormalization()(x)
-
-    """
-    x = Conv2D(64, kernel_size, padding="same", activation=activation, use_bias=False)(x)
-    x = Dropout(dropout)(x)
-    x = BatchNormalization()(x)
-    x = Conv2D(64, kernel_size, padding="same", activation=activation, use_bias=False)(x)
-    x = Dropout(dropout)(x)
-    x = BatchNormalization()(x)
-    """
-    
-    x = Conv2D(64, kernel_size=(5, 5), activation=activation,
-               strides=(2, 2), padding="same", use_bias=False)(x)
-    x = Dropout(dropout)(x)
-    
-    x = BatchNormalization()(x)
-    x = Flatten()(x)
-    x = Dense(128, activation=activation)(x)
-    x = Dropout(dropout)(x)
-    x = BatchNormalization()(x)
-    x = Dense(output_channels, activation="softmax")(x)
-
-    model = Model(inputs=[inputs], outputs=x)
-    return model
+    def forward(self, x):
+        x = x.view(-1, 1, 28, 28)
+        x = self.conv_stack(x)
+        #print(x.shape)
+        return x
