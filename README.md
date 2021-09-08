@@ -1,5 +1,5 @@
 # DeepSVDD
-Implementation of the papaer http://proceedings.mlr.press/v80/ruff18a/ruff18a.pdf
+Implementation of the paper http://proceedings.mlr.press/v80/ruff18a/ruff18a.pdf
 
 # TODO :
 
